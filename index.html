@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interactive Fence Proposal — Prepared for Robin | ZZ Company, LLC</title>
+  <style>
+    :root {
+      --bg: #F6F4EF; --surface: #FFFFFF; --surface-alt: #EFECE5;
+      --ink: #1D1C1A; --muted: #635F58; --border: #DFDAD0;
+      --accent: #9E5326; --accent-soft: #FBF3EC;
+      --forest: #26463B; --forest-soft: #EAF2EF;
+      --shadow: 0 8px 24px rgba(29, 28, 26, 0.06); --radius: 14px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Helvetica, Arial, sans-serif;
+      background-color: var(--bg); color: var(--ink); line-height: 1.5;
+      padding-bottom: 120px; -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1040px; margin: 0 auto; padding: 24px 16px 48px; }
+    .proposal-header {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 28px; box-shadow: var(--shadow); margin-bottom: 24px;
+      display: flex; flex-wrap: wrap; justify-content: space-between; gap: 20px; align-items: flex-start;
+    }
+    .brand-badge {
+      display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--forest); background: var(--forest-soft);
+      padding: 5px 10px; border-radius: 6px; margin-bottom: 10px;
+    }
+    .proposal-header h1 { font-size: 26px; font-weight: 750; letter-spacing: -0.02em; margin-bottom: 6px; }
+    .proposal-header p { color: var(--muted); font-size: 15px; max-width: 600px; }
+    .meta-box { background: var(--surface-alt); padding: 14px 18px; border-radius: 10px; font-size: 13px; min-width: 230px; }
+    .meta-row { display: flex; justify-content: space-between; gap: 16px; padding: 3px 0; }
+    .meta-row strong { font-weight: 600; }
+    .specs-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-bottom: 24px; }
+    .spec-pill { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; font-size: 13px; }
+    .spec-pill strong { display: block; font-size: 13.5px; margin-bottom: 2px; color: var(--ink); }
+    .spec-pill span { color: var(--muted); }
+    .presets-bar {
+      background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 18px 20px; margin-bottom: 28px; display: flex; flex-wrap: wrap;
+      align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .presets-label { font-size: 14px; font-weight: 650; }
+    .presets-label span { display: block; font-weight: 400; font-size: 12.5px; color: var(--muted); }
+    .preset-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    .preset-btn {
+      border: 1px solid var(--border); background: var(--bg); color: var(--ink);
+      padding: 9px 14px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.15s ease;
+    }
+    .preset-btn:hover { border-color: var(--accent); background: var(--accent-soft); }
+    .preset-btn.active { background: var(--forest); color: #fff; border-color: var(--forest); }
+    .section-block { margin-bottom: 32px; }
+    .section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; margin-bottom: 14px; gap: 8px; }
+    .section-title { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+    .section-sub { font-size: 13.5px; color: var(--muted); margin-top: 2px; }
+    .skip-btn { background: transparent; border: 1px dashed var(--border); color: var(--muted); font-size: 12.5px; padding: 6px 12px; border-radius: 8px; cursor: pointer; }
+    .skip-btn.selected { background: #2C2A28; color: #fff; border-style: solid; border-color: #2C2A28; }
+    .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(295px, 1fr)); gap: 16px; }
+    .opt-card {
+      background: var(--surface); border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 20px; cursor: pointer; transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+      display: flex; flex-direction: column; justify-content: space-between; position: relative;
+    }
+    .opt-card:hover { border-color: #B7AFA2; transform: translateY(-2px); }
+    .opt-card.selected { border-color: var(--accent); background: #FFFDFB; box-shadow: 0 10px 26px rgba(158, 83, 38, 0.12); }
+    .opt-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px; }
+    .opt-tag { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; padding: 4px 8px; border-radius: 5px; background: var(--surface-alt); color: var(--ink); }
+    .opt-card.selected .opt-tag { background: var(--accent); color: #fff; }
+    .rec-badge { font-size: 11px; font-weight: 700; color: var(--forest); background: var(--forest-soft); padding: 3px 8px; border-radius: 5px; }
+    .opt-name { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+    .opt-desc { font-size: 13.5px; color: var(--muted); margin-bottom: 14px; }
+    .opt-features { list-style: none; margin-bottom: 16px; border-top: 1px solid var(--surface-alt); padding-top: 12px; }
+    .opt-features li { font-size: 13px; color: var(--ink); padding: 3px 0 3px 18px; position: relative; }
+    .opt-features li::before { content: "•"; color: var(--accent); font-weight: bold; position: absolute; left: 4px; }
+    .sub-choice-box { background: var(--surface-alt); border-radius: 10px; padding: 10px; margin-bottom: 14px; font-size: 12.5px; }
+    .sub-choice-title { font-weight: 700; margin-bottom: 6px; display: block; color: var(--ink); }
+    .sub-radio { display: flex; align-items: flex-start; gap: 8px; padding: 6px 8px; border-radius: 7px; cursor: pointer; }
+    .sub-radio.active-sub { background: var(--surface); box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .sub-radio input { margin-top: 3px; accent-color: var(--accent); }
+    .diagram-box { background: var(--bg); border-radius: 8px; padding: 8px 10px; margin-bottom: 14px; text-align: center; }
+    .diagram-caption { font-size: 11px; color: var(--muted); margin-top: 4px; }
+    .price-footer { border-top: 1px solid var(--border); padding-top: 12px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .split-cost { font-size: 12px; color: var(--muted); line-height: 1.4; }
+    .total-price { text-align: right; }
+    .total-price .amount { font-size: 23px; font-weight: 800; color: var(--ink); font-variant-numeric: tabular-nums; display: block; line-height: 1.1; }
+    .total-price .per-ft { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .contingency-card { margin-top: 16px; background: var(--surface); border: 1px solid var(--border); border-left: 4px solid var(--accent); border-radius: 12px; padding: 18px 20px; }
+    .cont-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .cont-header h4 { font-size: 15px; font-weight: 700; }
+    .cont-toggle-btn { padding: 7px 12px; font-size: 12.5px; font-weight: 600; border-radius: 7px; border: 1px solid var(--accent); background: var(--accent-soft); color: var(--accent); cursor: pointer; }
+    .cont-desc { font-size: 13px; color: var(--muted); margin-bottom: 14px; }
+    .cont-controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .stepper-item { background: var(--bg); padding: 12px 14px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+    .stepper-info strong { display: block; font-size: 13px; }
+    .stepper-info span { font-size: 12px; color: var(--muted); }
+    .stepper-btns { display: flex; align-items: center; gap: 8px; }
+    .step-btn { width: 28px; height: 28px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); font-weight: 700; font-size: 16px; cursor: pointer; line-height: 1; }
+    .step-val { min-width: 24px; text-align: center; font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums; }
+    .summary-section { background: var(--surface); border: 2px solid var(--ink); border-radius: var(--radius); padding: 24px; margin-top: 32px; box-shadow: var(--shadow); }
+    .summary-section h3 { font-size: 19px; margin-bottom: 16px; }
+    .summary-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; font-size: 14px; }
+    .summary-table th, .summary-table td { padding: 10px 8px; border-bottom: 1px solid var(--surface-alt); text-align: left; font-variant-numeric: tabular-nums; }
+    .summary-table th { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+    .summary-table td.num, .summary-table th.num { text-align: right; }
+    .summary-totals-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; background: var(--surface-alt); padding: 16px; border-radius: 10px; margin-bottom: 18px; }
+    .tot-kpi span { display: block; font-size: 12px; color: var(--muted); }
+    .tot-kpi strong { font-size: 20px; font-weight: 800; font-variant-numeric: tabular-nums; }
+    .tot-kpi.grand strong { color: var(--accent); font-size: 26px; }
+    .action-row { display: flex; flex-wrap: wrap; gap: 10px; }
+    .btn-primary { background: var(--accent); color: #fff; border: none; padding: 13px 20px; border-radius: 10px; font-weight: 700; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-secondary { background: var(--forest); color: #fff; border: none; padding: 13px 18px; border-radius: 10px; font-weight: 650; font-size: 14px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-outline { background: var(--surface); color: var(--ink); border: 1px solid var(--border); padding: 13px 16px; border-radius: 10px; font-weight: 600; font-size: 14px; cursor: pointer; }
+    .toast { display: none; margin-top: 12px; padding: 10px 14px; border-radius: 8px; background: var(--forest-soft); color: var(--forest); font-size: 13px; font-weight: 600; }
+    .sticky-bar { position: fixed; bottom: 0; left: 0; right: 0; background: rgba(29, 28, 26, 0.96); backdrop-filter: blur(8px); color: #fff; padding: 12px 18px; z-index: 100; border-top: 1px solid rgba(255,255,255,0.12); }
+    .sticky-inner { max-width: 1040px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .sticky-nums { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+    .sticky-nums .big { font-size: 22px; font-weight: 800; font-variant-numeric: tabular-nums; color: #FFD2B3; }
+    .sticky-nums .sub { font-size: 13px; color: #D0CCC4; font-variant-numeric: tabular-nums; }
+    .sticky-cta { background: var(--accent); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
+    @media (max-width: 640px) { .proposal-header { padding: 20px; } .proposal-header h1 { font-size: 22px; } .sticky-nums .sub { display: none; } }
+    @media print { .sticky-bar, .presets-bar, .action-row, .skip-btn, .cont-toggle-btn { display: none !important; } body { background: #fff; padding-bottom: 0; } .opt-card:not(.selected) { display: none; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <header class="proposal-header">
+    <div>
+      <span class="brand-badge">ZZ Company, LLC • Houston, TX</span>
+      <h1>Interactive Cedar Fence Proposal</h1>
+      <p>Prepared exclusively for <strong>Robin</strong>. Click any option across the three fence sections below to compare styles, materials vs. labor breakdowns, and build your preferred package in real time.</p>
+    </div>
+    <div class="meta-box">
+      <div class="meta-row"><span>Client:</span><strong>Robin</strong></div>
+      <div class="meta-row"><span>Total Perimeter:</span><strong>Up to 220 Linear Ft</strong></div>
+      <div class="meta-row"><span>Picket Spec:</span><strong>6' Kiln-Dried Cedar</strong></div>
+      <div class="meta-row"><span>Quote Validity:</span><strong>14 Days</strong></div>
+    </div>
+  </header>
+
+  <div class="specs-bar">
+    <div class="spec-pill"><strong>Western Red / Kiln-Dried Cedar</strong><span>5-1/2" × 6 ft pickets — naturally rot & insect resistant</span></div>
+    <div class="spec-pill"><strong>3 Horizontal 2x4 PT Rails</strong><span>Upgraded from 2-rail layout to prevent Houston heat warping</span></div>
+    <div class="spec-pill"><strong>Ground-Contact Rot Boards</strong><span>Pressure-treated 2x6 base barrier against soil moisture & mowers</span></div>
+    <div class="spec-pill"><strong>Hot-Dipped Galv. Ring-Shank</strong><span>Anti-rust spiral nails that won't bleed black streaks on cedar</span></div>
+  </div>
+
+  <div class="presets-bar">
+    <div class="presets-label">Quick Package Presets (All 3 Sections — 220 ft)<span>Tap a preset or customize individual sections below</span></div>
+    <div class="preset-buttons">
+      <button class="preset-btn" id="pre-std" onclick="applyPreset('std')">Standard Side-by-Side (Opts 1 + 4 + 6)</button>
+      <button class="preset-btn" id="pre-gn" onclick="applyPreset('gn')">Good Neighbor Mix (Opts 1 + 3 + 6)</button>
+      <button class="preset-btn" id="pre-bob" onclick="applyPreset('bob')">Full Board-on-Board Premium (Opts 2 + 5 + 7)</button>
+    </div>
+  </div>
+
+  <section class="section-block">
+    <div class="section-head">
+      <div>
+        <h2 class="section-title">Section 1: Main Fence Line — 145 Linear Ft (Re-Skin)</h2>
+        <p class="section-sub">Demolish & haul away old pickets and rails; reuse sound existing posts & 2x6 rot boards; install 3 new PT 2x4 rails + cedar pickets.</p>
+      </div>
+      <button class="skip-btn" id="skip-s1" onclick="selectOption('s1', 'NONE')">Exclude Section 1 ($0)</button>
+    </div>
+    <div class="options-grid">
+      <div class="opt-card" id="card-Q1" onclick="selectOption('s1', 'Q1')">
+        <div>
+          <div class="opt-top"><span class="opt-tag">Option 1</span></div>
+          <div class="opt-name">Standard Cedar Side-by-Side</div>
+          <p class="opt-desc">Clean, classic privacy re-skin reusing salvageable posts and bottom 2x6 rot boards.</p>
+          <div class="diagram-box">
+            <svg width="220" height="36" viewBox="0 0 220 36" aria-label="Side by side top view">
+              <rect x="10" y="20" width="200" height="8" fill="#C9B89E" rx="2"/>
+              <rect x="14" y="10" width="36" height="8" fill="#B56735" rx="1"/>
+              <rect x="52" y="10" width="36" height="8" fill="#B56735" rx="1"/>
+              <rect x="90" y="10" width="36" height="8" fill="#B56735" rx="1"/>
+              <rect x="128" y="10" width="36" height="8" fill="#B56735" rx="1"/>
+              <rect x="166" y="10" width="36" height="8" fill="#B56735" rx="1"/>
+            </svg>
+            <div class="diagram-caption">Top-down view: Single-layer edge-to-edge cedar pickets on 2x4 rail</div>
+          </div>
+          <ul class="opt-features">
+            <li>Demo & haul-off of existing pickets and old 2x4 rails</li>
+            <li>Upgraded to <strong>3 rows of new PT 2x4 rails</strong></li>
+            <li>6 ft kiln-dried cedar pickets installed side-by-side</li>
+            <li>Reuses sound existing 4x4 posts & 2x6 rot boards</li>
+          </ul>
+        </div>
+        <div class="price-footer">
+          <div class="split-cost">Materials: <strong>$2,140</strong><br/>Labor & Demo: <strong>$1,740</strong></div>
+          <div class="total-price"><span class="amount">$3,880</span><span class="per-ft">$26.76 / linear ft</span></div>
+        </div>
+      </div>
+
+      <div class="opt-card" id="card-Q2" onclick="selectOption('s1', 'Q2')">
+        <div>
+          <div class="opt-top"><span class="opt-tag">Option 2</span><span class="rec-badge">100% Zero-Gap Privacy</span></div>
+          <div class="opt-name">Board-on-Board + Top Cap & Trim</div>
+          <p class="opt-desc">Overlapping double-layer cedar pickets with architectural top cap & fascia trim.</p>
+          <div class="diagram-box">
+            <svg width="220" height="42" viewBox="0 0 220 42" aria-label="Board on board top view">
+              <rect x="10" y="26" width="200" height="8" fill="#C9B89E" rx="2"/>
+              <rect x="16" y="16" width="38" height="8" fill="#9A5226" rx="1"/>
+              <rect x="74" y="16" width="38" height="8" fill="#9A5226" rx="1"/>
+              <rect x="132" y="16" width="38" height="8" fill="#9A5226" rx="1"/>
+              <rect x="45" y="7" width="38" height="8" fill="#C87A45" rx="1"/>
+              <rect x="103" y="7" width="38" height="8" fill="#C87A45" rx="1"/>
+              <rect x="161" y="7" width="38" height="8" fill="#C87A45" rx="1"/>
+            </svg>
+            <div class="diagram-caption">Top-down view: Overlapping cedar pickets — zero gaps even after drying</div>
+          </div>
+          <div class="sub-choice-box" onclick="event.stopPropagation()">
+            <span class="sub-choice-title">Select Top Cap Construction Style:</span>
+            <label class="sub-radio active-sub" id="lbl-cap-flat" onclick="setCapStyle('flat')">
+              <input type="radio" name="capstyle" id="rad-cap-flat" checked />
+              <div><strong>Pro 2x6 Flat Cap + 1x4 Cedar Trim ($5,171)</strong><br/><span>Pickets trimmed flush to post tops; structural 2x6 cap anchored directly into posts (Recommended for wind stability).</span></div>
+            </label>
+            <label class="sub-radio" id="lbl-cap-l" onclick="setCapStyle('lcap')">
+              <input type="radio" name="capstyle" id="rad-cap-l" />
+              <div><strong>Full-Height L-Shaped 2x4 Cap + 1x2 Trim ($5,417)</strong><br/><span>Uncut full-height pickets extending above post tops with custom L-assembled 2x4 cap & 1x2 interior trim (+$246).</span></div>
+            </label>
+          </div>
+          <ul class="opt-features">
+            <li>~22% more cedar lumber with generous 1" side overlaps</li>
+            <li>3 new horizontal PT 2x4 rails + top cap & trim finish</li>
+          </ul>
+        </div>
+        <div class="price-footer">
+          <div class="split-cost" id="q2-split">Materials: <strong>$2,921</strong><br/>Labor & Demo: <strong>$2,250</strong></div>
+          <div class="total-price"><span class="amount" id="q2-total">$5,171</span><span class="per-ft" id="q2-perft">$35.66 / linear ft</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contingency-card" id="cont-panel">
+      <div class="cont-header">
+        <h4>145 ft Site Condition & Hidden Damage Allowance (Field-Verified)</h4>
+        <button class="cont-toggle-btn" id="cont-preset-btn" onclick="toggleVideoAllowance()">Reset to $0 (Base Re-Skin Only)</button>
+      </div>
+      <p class="cont-desc">Base Options 1 & 2 assume existing posts and 2x6 rot boards are reusable. Because initial walkthrough showed a collapsed ivy-covered bay and several leaning/rotted posts, we pre-loaded a realistic estimate below so there are no surprises. <strong>You are only billed for the exact count replaced after old pickets are removed.</strong></p>
+      <div class="cont-controls">
+        <div class="stepper-item">
+          <div class="stepper-info"><strong>New 4x4 PT Post + Concrete</strong><span>$113 / post ($28 mat + $85 labor)</span></div>
+          <div class="stepper-btns">
+            <button class="step-btn" onclick="adjCount('posts', -1)">−</button>
+            <span class="step-val" id="val-posts">6</span>
+            <button class="step-btn" onclick="adjCount('posts', 1)">+</button>
+          </div>
+        </div>
+        <div class="stepper-item">
+          <div class="stepper-info"><strong>New 2x6x8 PT Rot Board</strong><span>$29 / board ($9 mat + $20 labor)</span></div>
+          <div class="stepper-btns">
+            <button class="step-btn" onclick="adjCount('rot', -1)">−</button>
+            <span class="step-val" id="val-rot">6</span>
+            <button class="step-btn" onclick="adjCount('rot', 1)">+</button>
+          </div>
+        </div>
+        <div class="stepper-
